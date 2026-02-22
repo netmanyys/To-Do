@@ -8,6 +8,14 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Deploy via server-local script
+      - name: Debug + Deploy
+        shell: bash
         run: |
+          set -euxo pipefail
+          whoami
+          id
+          pwd
+          ls -alh /opt/todo || true
+          ls -alh /opt/todo/deploy.sh
           /opt/todo/deploy.sh
+          docker ps
