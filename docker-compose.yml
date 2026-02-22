@@ -1,0 +1,69 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: nextfast
+      POSTGRES_PASSWORD: nextfast
+      POSTGRES_DB: nextfast
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nextfast -d nextfast"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redisdata:/data
+
+  api:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://nextfast:nextfast@db:5432/nextfast
+      REDIS_URL: redis://redis:6379/0
+      APP_ENV: dev
+      SESSION_COOKIE: sid
+      SESSION_TTL_SECONDS: 604800
+      # Admin bootstrap (option B)
+      ADMIN_BOOTSTRAP_USERNAME: ${ADMIN_BOOTSTRAP_USERNAME:-}
+      ADMIN_BOOTSTRAP_PASSWORD: ${ADMIN_BOOTSTRAP_PASSWORD:-}
+      ADMIN_BOOTSTRAP_EMAIL: ${ADMIN_BOOTSTRAP_EMAIL:-}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+    ports:
+      - "192.168.50.170:8001:8000"
+
+  web:
+    build:
+      context: ./frontend
+    environment:
+      INTERNAL_API_BASE: http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "192.168.50.170:3001:3000"
+
+  web_admin:
+    build:
+      context: ./frontend_admin
+    environment:
+      INTERNAL_API_BASE: http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "192.168.50.170:3002:3000"
+
+volumes:
+  pgdata:
+  redisdata:

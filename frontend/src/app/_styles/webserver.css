@@ -1,0 +1,279 @@
+/* Copied/ported from /Users/yan/Dev/webserver main.go template for identical look */
+:root { color-scheme: light dark; }
+
+/* Default: dark blue */
+body.theme-dark {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.5;
+  color: rgba(226,232,240,.92); /* ensure readability (matches 8080 look) */
+  background: radial-gradient(1200px 600px at 20% 10%, rgba(99,102,241,.25), transparent 60%),
+              radial-gradient(900px 500px at 80% 20%, rgba(16,185,129,.18), transparent 60%),
+              radial-gradient(900px 600px at 50% 90%, rgba(59,130,246,.18), transparent 60%);
+}
+
+/* Light theme: clean neutral + subtle blue accents (black text) */
+body.theme-light {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.5;
+  color: rgba(2, 6, 23, .92);
+  background:
+    radial-gradient(1000px 540px at 18% 8%, rgba(99,102,241,.14), transparent 62%),
+    radial-gradient(900px 520px at 82% 18%, rgba(14,165,233,.10), transparent 62%),
+    radial-gradient(950px 620px at 50% 95%, rgba(16,185,129,.08), transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,1), rgba(241,245,249,1));
+}
+
+body.theme-light .card {
+  background: rgba(255,255,255,.62);
+  border: 1px solid rgba(15,23,42,.10);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  box-shadow:
+    0 18px 55px rgba(2,6,23,.12),
+    0 1px 0 rgba(255,255,255,.9) inset;
+}
+
+body.theme-light h1 { color: rgba(2,6,23,.95); }
+body.theme-light p.sub { color: rgba(15,23,42,.72); }
+body.theme-light a { color: rgba(37,99,235,.95); }
+
+body.theme-light input[type=text],
+body.theme-light input[type=password],
+body.theme-light select {
+  background: rgba(255,255,255,.72);
+  color: rgba(2,6,23,.95);
+  border: 1px solid rgba(15,23,42,.14);
+  backdrop-filter: blur(8px) saturate(130%);
+  -webkit-backdrop-filter: blur(8px) saturate(130%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 8px 22px rgba(2,6,23,.06);
+}
+
+body.theme-light button {
+  color: rgba(2,6,23,.95);
+  border: 1px solid rgba(15,23,42,.14);
+  background: rgba(37,99,235,.12);
+}
+body.theme-light button:hover { filter: brightness(1.04); }
+body.theme-light .btn-ghost { background: rgba(2,6,23,.06); }
+body.theme-light .btn-danger { background: rgba(239,68,68,.10); border-color: rgba(239,68,68,.22); }
+
+body.theme-light li {
+  background: rgba(255,255,255,.45);
+  border: 1px solid rgba(15,23,42,.10);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+}
+
+body.theme-light li.todo-todo {
+  border-color: rgba(234,179,8,.22);
+  background: rgba(234,179,8,.10);
+}
+
+body.theme-light li.todo-done {
+  border-color: rgba(22,101,52,.22);
+  background: rgba(22,101,52,.10);
+}
+body.theme-light .text { color: rgba(2,6,23,.95); }
+body.theme-light .meta { color: rgba(2,6,23,.62); }
+.wrap { min-height: 100vh; display: grid; place-items: start center; padding: 22px; }
+.card {
+  width: min(920px, 100%);
+  border: 1px solid rgba(148,163,184,.32);
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(2, 6, 23, .70); /* darker for higher contrast */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  margin-top: 20px;
+}
+.top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+
+/* Large header frame (for experimenting with a single gray block) */
+.header-block {
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(148,163,184,.18);
+  background: rgba(148,163,184,.10);
+  margin-bottom: 12px;
+}
+
+body.theme-light .header-block {
+  border: 1px solid rgba(15,23,42,.10);
+  background: rgba(2,6,23,.04); /* single gray */
+}
+h1 { margin: 0 0 4px; font-size: 28px; letter-spacing: -.02em; color: rgba(226,232,240,.98); }
+p.sub { margin: 0 0 14px; color: rgba(226,232,240,.92); font-size: 14px; }
+a { color: rgba(147,197,253,.95); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+form.row { display: flex; gap: 10px; margin: 14px 0 18px; }
+
+/* better on iPhone */
+form.row.row-stack {
+  flex-direction: column;
+}
+form.row.row-stack button { width: 100%; }
+
+/* 3-column row layout so filter row and add row align (box-to-box, button-to-button) */
+form.row.row-grid-3 {
+  display: grid;
+  /* mobile-friendly: keep both boxes visible and aligned */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 96px;
+  gap: 10px;
+  align-items: stretch;
+}
+form.row.row-grid-3 > * { min-width: 0; }
+form.row.row-grid-3 button { width: 96px; }
+/* override flex sizing inside grid rows */
+form.row.row-grid-3 input,
+form.row.row-grid-3 select {
+  flex: initial;
+  width: 100%;
+}
+
+/* Header selects (avoid overriding .btn-small sizing) */
+.top select:not(.btn-small) {
+  padding: 10px 10px;
+}
+
+.top-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Make logout button same width as theme select */
+.top-right-wide {
+  /* match Filter/Add button width (row-grid-3 uses 96px for the button column) */
+  width: 96px;
+}
+
+.top-right-wide > form {
+  width: 100%;
+}
+
+.top-right-wide select {
+  width: 100%;
+}
+input[type=text], input[type=password], select {
+  flex: 1;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,.32);
+  background: rgba(2,6,23,.55);
+  color: rgba(226,232,240,.98);
+  outline: none;
+}
+input::placeholder { color: rgba(226,232,240,.65); }
+select {
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,.32);
+  background: rgba(2,6,23,.55);
+  color: rgba(226,232,240,.98);
+}
+button {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,.28);
+  background: rgba(99,102,241,.30);
+  color: rgba(226,232,240,.98);
+  cursor: pointer;
+}
+button:hover { filter: brightness(1.08); }
+
+ul { list-style: none; padding: 0; margin: 0; }
+li {
+  display: grid;
+  /* give the left text column more room; keep actions a stable width */
+  grid-template-columns: minmax(0, 1fr) clamp(240px, 48vw, 360px);
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid rgba(148,163,184,.18);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  background: rgba(2,6,23,.25);
+}
+
+/* Not-done todo card tint (soft pale yellow) */
+li.todo-todo {
+  border-color: rgba(234,179,8,.22);
+  background: rgba(234,179,8,.08);
+}
+
+/* Completed todo card tint (soft dark green) */
+li.todo-done {
+  /* 墨绿色（柔和、不刺眼） */
+  border-color: rgba(22,101,52,.28);
+  background: rgba(22,101,52,.12);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+/* 1:1:1 layout for todo actions (Undo/Done | Priority | Delete) */
+.actions.actions-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  align-items: stretch;
+  justify-items: stretch;
+  width: 100%;
+}
+.actions.actions-3 form { margin: 0; }
+.actions.actions-3 button,
+.actions.actions-3 select {
+  width: 100%;
+}
+.text { font-size: 16px; color: rgba(226,232,240,.98); }
+.text.done { text-decoration: line-through; opacity: .6; }
+.meta { font-size: 12px; opacity: .80; margin-top: 4px; }
+
+.btn-small {
+  /* unify control height so button/select align perfectly (esp iOS Safari select) */
+  height: 40px;
+  padding: 0 12px;
+  line-height: 40px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+select.btn-small {
+  /* iOS Safari: make select render same baseline/height as buttons */
+  display: block;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Theme select: center the text */
+select.theme-select {
+  text-align: center;
+  text-align-last: center;
+  /* explicit padding to prevent iOS Safari clipping */
+  padding: 0 28px 0 12px;
+  font-weight: 500;
+}
+
+/* Ensure theme text is always readable */
+body.theme-dark select.theme-select {
+  color: rgba(226,232,240,.98);
+}
+body.theme-light select.theme-select {
+  color: rgba(2,6,23,.95);
+}
+.btn-danger { background: rgba(239,68,68,.22); }
+.btn-ghost { background: rgba(148,163,184,.10); }
+
+.footer { margin-top: 18px; font-size: 12px; opacity: .65; }
+.err { margin: 8px 0 0; color: rgba(248,113,113,.95); font-size: 14px; }
