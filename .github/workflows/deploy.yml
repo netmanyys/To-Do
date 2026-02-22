@@ -1,0 +1,13 @@
+name: Build & Deploy (Ubuntu Self-hosted)
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Deploy via server-local script
+        run: |
+          /opt/todo/deploy.sh
