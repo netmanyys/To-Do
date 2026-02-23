@@ -230,6 +230,11 @@ def health():
         redis_ok = False
     return {"ok": True, "redis": redis_ok}
 
+@app.get("/healthz")
+async def healthz():
+    # super cheap liveness probe
+    return {"ok": True}
+
 
 @app.post("/api/login", response_model=LoginOut)
 def login(body: AuthIn, response: Response):
