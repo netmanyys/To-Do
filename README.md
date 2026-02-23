@@ -99,11 +99,14 @@ Settings → Actions → Runners → New self-hosted runner → Linux
 
 它会给你一段命令，照抄在 Ubuntu 上执行。一般长这样（以页面为准）：
 ```bash
-mkdir -p ~/actions-runner && cd ~/actions-runner
-curl -o actions-runner-linux-x64-*.tar.gz -L <URL>
-tar xzf actions-runner-linux-x64-*.tar.gz
-./config.sh --url https://github.com/<you>/<repo> --token <TOKEN>
+# Create a folder
+$ mkdir actions-runner && cd actions-runner# Download the latest runner package
+$ curl -o actions-runner-linux-x64-2.331.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.331.0/actions-runner-linux-x64-2.331.0.tar.gz# Optional: Validate the hash
+$ echo "5fcc01bd546ba5c3f1291c2803658ebd3cedb3836489eda3be357d41bfcf28a7  actions-runner-linux-x64-2.331.0.tar.gz" | shasum -a 256 -c# Extract the installer
+$ tar xzf ./actions-runner-linux-x64-2.331.0.tar.gz
 
+# Create the runner and start the configuration experience
+$ ./config.sh --url https://github.com/netmanyys/To-Do --token AGI7ONYXNUIV2OSSKILUNRDJTPV2A# Last step, run it!
 # 然后启动 runner：
 
 ./run.sh

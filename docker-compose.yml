@@ -74,7 +74,7 @@ services:
     depends_on:
       - api
     ports:
-      - "127.0.0.1:3002:3000"
+      - "0.0.0.0:3002:3000"
 
 volumes:
   pgdata:
