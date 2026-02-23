@@ -1,6 +1,10 @@
 services:
   db:
     image: postgres:16
+    privileged: true
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
     environment:
       POSTGRES_USER: nextfast
       POSTGRES_PASSWORD: nextfast
@@ -17,6 +21,10 @@ services:
 
   redis:
     image: redis:7
+    privileged: true
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
     ports:
       - "127.0.0.1:6379:6379"
     volumes:
@@ -25,13 +33,13 @@ services:
   api:
     build:
       context: ./backend
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--loop", "asyncio", "--http", "h11"]
     environment:
       DATABASE_URL: postgresql+psycopg://nextfast:nextfast@db:5432/nextfast
       REDIS_URL: redis://redis:6379/0
       APP_ENV: dev
       SESSION_COOKIE: sid
       SESSION_TTL_SECONDS: 604800
-      # Admin bootstrap (option B)
       ADMIN_BOOTSTRAP_USERNAME: ${ADMIN_BOOTSTRAP_USERNAME:-}
       ADMIN_BOOTSTRAP_PASSWORD: ${ADMIN_BOOTSTRAP_PASSWORD:-}
       ADMIN_BOOTSTRAP_EMAIL: ${ADMIN_BOOTSTRAP_EMAIL:-}
@@ -42,7 +50,7 @@ services:
         condition: service_started
     restart: unless-stopped
     ports:
-      - "192.168.50.170:8001:8000"
+      - "127.0.0.1:8001:8000"
 
   web:
     build:
@@ -52,7 +60,7 @@ services:
     depends_on:
       - api
     ports:
-      - "192.168.50.170:3001:3000"
+      - "0.0.0.0:3001:3000"
 
   web_admin:
     build:
@@ -62,7 +70,7 @@ services:
     depends_on:
       - api
     ports:
-      - "192.168.50.170:3002:3000"
+      - "127.0.0.1:3002:3000"
 
 volumes:
   pgdata:
